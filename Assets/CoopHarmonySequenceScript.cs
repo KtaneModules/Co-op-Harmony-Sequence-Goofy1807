@@ -484,7 +484,7 @@ public class CoopHarmonySequenceScript : MonoBehaviour
 
         for (int i = 0; i < 4; i++)
         {
-            newOrder[2][i] = Array.IndexOf(stages[IdentInstruments[2]][2], (cycAmount + i) % 4 );
+            newOrder[2][i] = Array.IndexOf(stages[IdentInstruments[2]][2], (cycAmount + i) % 4);
         }
 
         newOrder[3][0] = Array.IndexOf(stages[IdentInstruments[3]][3], 0);
@@ -494,12 +494,12 @@ public class CoopHarmonySequenceScript : MonoBehaviour
 
         for (int i = 0; i < 4; i++)
         {
-            if (i == 0) Debug.LogFormat(@"[Coop Harmony Sequence #{0}] ----------MODULE SETUP----------", moduleId, i + 1);
-            Debug.LogFormat(@"[Coop Harmony Sequence #{0}] ----------Stage {1}----------", moduleId, i + 1);
-            Debug.LogFormat(@"[Coop Harmony Sequence #{0}] Identify instrument/Input instrument: {2}/{3}", moduleId, i + 1, nameInstrument(i, 0), nameInstrument(i, 1));
-            Debug.LogFormat(@"[Coop Harmony Sequence #{0}] Button order from lowest note to highest note: {2}, {3}, {4}, {5}", moduleId, i + 1, Array.IndexOf(stages[IdentInstruments[i]][i], 0) + 1, Array.IndexOf(stages[IdentInstruments[i]][i], 1) + 1, Array.IndexOf(stages[IdentInstruments[i]][i], 2) + 1, Array.IndexOf(stages[IdentInstruments[i]][i], 3) + 1);
-            Debug.LogFormat(@"[Coop Harmony Sequence #{0}] New button order: {2}, {3}, {4}, {5}", moduleId, i + 1, newOrder[i][0] + 1, newOrder[i][1] + 1, newOrder[i][2] + 1, newOrder[i][3] + 1);
-            if (i == 3) Debug.LogFormat(@"[Coop Harmony Sequence #{0}] ----------DEFUSER INPUT----------", moduleId, i + 1);
+            if (i == 0) Debug.LogFormat(@"[Co-op Harmony Sequence #{0}] ----------MODULE SETUP----------", moduleId, i + 1);
+            Debug.LogFormat(@"[Co-op Harmony Sequence #{0}] ----------Stage {1}----------", moduleId, i + 1);
+            Debug.LogFormat(@"[Co-op Harmony Sequence #{0}] Identify instrument/Input instrument: {2}/{3}", moduleId, i + 1, nameInstrument(i, 0), nameInstrument(i, 1));
+            Debug.LogFormat(@"[Co-op Harmony Sequence #{0}] Button order from lowest note to highest note: {2}, {3}, {4}, {5}", moduleId, i + 1, Array.IndexOf(stages[IdentInstruments[i]][i], 0) + 1, Array.IndexOf(stages[IdentInstruments[i]][i], 1) + 1, Array.IndexOf(stages[IdentInstruments[i]][i], 2) + 1, Array.IndexOf(stages[IdentInstruments[i]][i], 3) + 1);
+            Debug.LogFormat(@"[Co-op Harmony Sequence #{0}] New button order: {2}, {3}, {4}, {5}", moduleId, i + 1, newOrder[i][0] + 1, newOrder[i][1] + 1, newOrder[i][2] + 1, newOrder[i][3] + 1);
+            if (i == 3) Debug.LogFormat(@"[Co-op Harmony Sequence #{0}] ----------DEFUSER INPUT----------", moduleId, i + 1);
         }
 
         //RULESEED
@@ -517,14 +517,14 @@ public class CoopHarmonySequenceScript : MonoBehaviour
 
     void Match(int btnPressed)
     {
-        if (!stagePressed) Debug.LogFormat(@"[Coop Harmony Sequence #{0}] ----------Stage {1}----------", moduleId, currentStage + 1);
-        Debug.LogFormat(@"[Coop Harmony Sequence #{0}] Expected button #{1} on {3}- You pressed button #{2} on {4}", moduleId, newOrder[currentStage][correctNotes] + 1, btnPressed + 1, nameInstrument(currentStage, 1), nameInstrument(moduleInstrument, 2));
+        if (!stagePressed) Debug.LogFormat(@"[Co-op Harmony Sequence #{0}] ----------Stage {1}----------", moduleId, currentStage + 1);
+        Debug.LogFormat(@"[Co-op Harmony Sequence #{0}] Expected button #{1} on {3} - you pressed button #{2} on {4}", moduleId, newOrder[currentStage][correctNotes] + 1, btnPressed + 1, nameInstrument(currentStage, 1), nameInstrument(moduleInstrument, 2));
         stagePressed = true;
         if (InputInstruments[currentStage] == moduleInstrument)
         {
             if (btnPressed == newOrder[currentStage][correctNotes])
             {
-                Debug.LogFormat(@"[Coop Harmony Sequence #{0}] You pressed the correct button - Well done", moduleId);
+                Debug.LogFormat(@"[Co-op Harmony Sequence #{0}] You pressed the correct button - Well done", moduleId);
                 Audio.PlaySoundAtTransform(harmonies[moduleInstrument][moduleHarmony][currentStage][stages[moduleInstrument][currentStage][btnPressed]], transform);
                 SeqLights[btnPressed].gameObject.SetActive(true);
                 correctNotes++;
@@ -601,7 +601,7 @@ public class CoopHarmonySequenceScript : MonoBehaviour
     {
         strikeHandlerActive = true;
         Text[3].gameObject.SetActive(true);
-        Debug.LogFormat(@"[Coop Harmony Sequence #{0}] You pressed the wrong button - Strike", moduleId);
+        Debug.LogFormat(@"[Co-op Harmony Sequence #{0}] You pressed the wrong button - Strike", moduleId);
         correctNotes = 0;
         DisableLights();
         GetComponent<KMBombModule>().HandleStrike();
@@ -658,10 +658,9 @@ public class CoopHarmonySequenceScript : MonoBehaviour
     {
         moduleSolved = true;
         Text[2].gameObject.SetActive(true);
-        StartCoroutine(Harmony());
-        yield return new WaitUntil(() => !harmonyRunning);
+        yield return StartCoroutine(Harmony());
         GetComponent<KMBombModule>().HandlePass();
-        Debug.LogFormat(@"[Coop Harmony Sequence #{0}] You passed the module - Strikes caused by this module: {1}", moduleId, Strike);
+        Debug.LogFormat(@"[Co-op Harmony Sequence #{0}] You passed the module - Strikes caused by this module: {1}", moduleId, Strike);
         StopAllCoroutines();
     }
 
@@ -721,16 +720,17 @@ public class CoopHarmonySequenceScript : MonoBehaviour
 #pragma warning restore 414
     IEnumerator ProcessTwitchCommand(string command)
     {
+        Match m;
         do
         {
             yield return "trycancel";
         } while (stageCompleteActive || strikeHandlerActive);
         if (moduleSolved)
         {
-            yield return "sendtochaterror The module has entered its Harmony Phase, causing this module to be solve shortly.";
+            yield return "sendtochaterror The module has entered its Harmony Phase, causing this module to be solved shortly.";
             yield break;
         }
-        if (Regex.IsMatch(command, @"^\s*start\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        else if (Regex.IsMatch(command, @"^\s*start\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             if (listen)
             {
@@ -741,7 +741,7 @@ public class CoopHarmonySequenceScript : MonoBehaviour
             LstnBtn.OnInteract();
             yield break;
         }
-        if (Regex.IsMatch(command, @"^\s*stop\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        else if (Regex.IsMatch(command, @"^\s*stop\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             if (!listen)
             {
@@ -752,15 +752,14 @@ public class CoopHarmonySequenceScript : MonoBehaviour
             LstnBtn.OnInteractEnded();
             yield break;
         }
-        if (Regex.IsMatch(command, @"^\s*reset\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        else if (Regex.IsMatch(command, @"^\s*reset\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             yield return null;
             correctNotes = 0;
             DisableLights();
             yield break;
         }
-        Match m;
-        if ((m = Regex.Match(command, @"^\s*instrument\s+(xylo|piano|music|harp)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Success)
+        else if ((m = Regex.Match(command, @"^\s*instrument\s+(xylo|piano|music|harp)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Success)
         {
             yield return null;
             if (listen)
@@ -777,7 +776,7 @@ public class CoopHarmonySequenceScript : MonoBehaviour
             }
             yield break;
         }
-        if ((m = Regex.Match(command, @"^\s*sound\s+([\d,;]+)$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Success)
+        else if ((m = Regex.Match(command, @"^\s*sound\s+([\d,;]+)$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Success)
         {
             var numbers = m.Groups[1].Value.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).Select(str =>
             {
@@ -794,8 +793,43 @@ public class CoopHarmonySequenceScript : MonoBehaviour
                 yield return new WaitForSeconds(.1f);
             }
             yield return numbers.Select(n => SeqBtns[n.Value - 1]).ToArray();
-            yield return "solve";
+            yield return new WaitUntil(() => stageCompleteActive || strikeHandlerActive);
+            if (currentStage == 3)
+                yield return "solve";
             yield break;
+        }
+        else
+        {
+            yield return "sendtochaterror Invalid Command";
+            yield break;
+        }
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        Debug.LogFormat(@"[Co-op Harmony Sequence #{0}] Module was force solved by TP", moduleId);
+
+        if (listen)
+        {
+            LstnBtn.OnInteractEnded();
+            yield return new WaitForSeconds(.1f);
+        }
+
+        while (!moduleSolved)
+        {
+            while (stageCompleteActive || strikeHandlerActive)
+                yield return true;
+
+            if (moduleSolved)
+                break;
+
+            while (moduleInstrument != InputInstruments[currentStage])
+            {
+                InsCycBtns[1].OnInteract();
+                yield return new WaitForSeconds(.1f);
+            }
+            SeqBtns[newOrder[currentStage][correctNotes]].OnInteract();
+            yield return new WaitForSeconds(.2f);
         }
     }
 }
