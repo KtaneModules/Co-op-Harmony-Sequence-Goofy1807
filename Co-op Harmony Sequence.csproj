@@ -238,7 +238,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\CoopHarmonySequenceScript.cs" />
+    <Compile Include="Assets\Co-op Harmony Sequence\Scripts\CoopHarmonySequenceScript.cs" />
     <Compile Include="Assets\Examples\1.1 Module\ExampleModule.cs" />
     <Compile Include="Assets\Examples\1.10 NeedyModule\ExampleNeedyModule.cs" />
     <Compile Include="Assets\Examples\1.12 Holdable\BombCreatorExample.cs" />
@@ -276,6 +276,7 @@
     <Compile Include="Assets\TestHarness\Widgets\Widget.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Co-op Harmony Sequence\Shaders\Texture Colored.shader" />
     <None Include="Assets\Examples\Assets\Shaders\BlendTwoTexturesLitAndUnlit.shader" />
     <None Include="Assets\Examples\Assets\Shaders\BlendTwoTexturesLitAndUnlitVertexColor.shader" />
     <None Include="Assets\Examples\Assets\Shaders\BlendTwoTexturesUnlit.shader" />
